@@ -32,7 +32,20 @@ public class EventLogController {
     return "OK";
   }
 
+  @RequestMapping(method = RequestMethod.GET, value = "/events")
+  public List<EventLogEntity> events(
+          @RequestParam(value="since", required=false, defaultValue = "0" ) long timestamp,
+          @RequestParam(value="block", required=false, defaultValue = "-1" ) long blocknum,
+          HttpServletRequest request) {
 
+    QueryFactory query = new QueryFactory(timestamp, blocknum);
+    query.setPageniate(this.setPagniateVariable(request));
+    System.out.println(query.toString());
+
+    List<EventLogEntity> result = mongoTemplate.find(query.getQuery(),EventLogEntity.class);
+    return result;
+
+  }
   @RequestMapping(method = RequestMethod.GET, value = "/event/transaction/{transactionId}")
   public List<EventLogEntity> findOneByTransaction(@PathVariable String transactionId) {
     long startTime = System.nanoTime();
