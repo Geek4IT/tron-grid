@@ -15,7 +15,7 @@ public class EventWriterController{
     @RequestMapping(method = RequestMethod.POST, value = "/send")
     @ResponseBody
     public String healthCheck(@RequestParam(value="data", required = true) String data,
-                              @RequestParam(value="key", required = true) String key
+                              @RequestHeader("key") String key
                               ){
         System.out.println(data);
         System.out.println("\n");
